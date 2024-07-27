@@ -26,7 +26,7 @@ namespace AdvocaPro
                 .ConfigureLifecycleEvents(events =>
                 {
 #if WINDOWS
-                    //TODO: [PEDRO] Rever essa lógica em breve
+                    //TODO: [PEDRO] Rever essa lógica em breve pois tem bug
                     //JANELA PRINCIPAL SEM TITULO E NÃO DIMENSIONAVEL MAS FUNCIONA PARA A TELA DE LOGIN
                     events.AddWindows(windows =>
                     {
