@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:AdvocaPro.ViewModel"
+             xmlns:converters="clr-namespace:AdvocaPro.Converters"
+             x:Class="AdvocaPro.View.ClientProfileView"
+             Title="Perfil do Cliente">
+
+	<Grid ColumnDefinitions="*,1,300" Padding="24,8">
+		<ScrollView Grid.Column="0" Padding="20,20,40,20">
+			<StackLayout Spacing="12">
+				<Label Text="Perfil do Cliente" FontSize="24" TextColor="{StaticResource EmphasisHigh}" HorizontalOptions="Start" Padding="0,16"/>
+
+				<Grid ColumnDefinitions="*,200,120" RowDefinitions="Auto,Auto" ColumnSpacing="16" RowSpacing="12">
+					<Label Grid.Column="0" Grid.Row="0" Text="Nome" TextColor="{StaticResource EmphasisHigh}" />
+					<Entry Grid.Column="0" Grid.Row="1" Placeholder="Nome" Text="{Binding Client.Name}" PlaceholderColor="{StaticResource EmphasisLow}" TextColor="{StaticResource EmphasisHigh}" BackgroundColor="{StaticResource DarkModeBox}" />
+					<Label Grid.Column="1" Grid.Row="0" Text="Estado civil" TextColor="{StaticResource EmphasisHigh}" />
+					<Picker Grid.Column="1" Grid.Row="1" ItemsSource="{Binding MaritalStatusOptions}" SelectedItem="{Binding Client.MaritalStatus}" TextColor="{StaticResource EmphasisHigh}" BackgroundColor="{StaticResource DarkModeBox}" />
+					<Label Grid.Column="2" Grid.Row="0" Text="Ativo" TextColor="{StaticResource EmphasisHigh}" />
+					<Picker Grid.Column="2" Grid.Row="1" ItemsSource="{Binding IsActiveOptions}" SelectedItem="{Binding IsActiveString}" TextColor="{StaticResource EmphasisHigh}" BackgroundColor="{StaticResource DarkModeBox}" />
+				</Grid>
+
+				<Grid ColumnDefinitions="150,*,*,*,*,*" RowDefinitions="Auto,Auto" ColumnSpacing="16" RowSpacing="12">
+					<Label Grid.Column="0" Grid.Row="0" Text="Data de Nascimento" TextColor="{StaticResource EmphasisHigh}" />
+					<DatePicker Grid.Column="0" Grid.Row="1" Date="{Binding Client.BirthdayDate}" Format="dd/MM/yyyy" WidthRequest="150" BackgroundColor="{StaticResource DarkModeBox}" />
+					<Label Grid.Column="1" Grid.Row="0" Text="CPF" TextColor="{StaticResource EmphasisHigh}" />
+					<Entry Grid.Column="1" Grid.Row="1" Placeholder="CPF" Text="{Binding Client.CPF}" PlaceholderColor="{StaticResource EmphasisLow}" TextColor="{StaticResource EmphasisHigh}" BackgroundColor="{StaticResource DarkModeBox}" />
+					<Label Grid.Column="2" Grid.Row="0" Text="RG" TextColor="{StaticResource EmphasisHigh}" />
+					<Entry Grid.Column="2" Grid.Row="1" Placeholder="RG" Text="{Binding Client.RG}" PlaceholderColor="{StaticResource EmphasisLow}" TextColor="{StaticResource EmphasisHigh}" BackgroundColor="{StaticResource DarkModeBox}" />
+					<Label Grid.Column="3" Grid.Row="0" Text="Telefone" TextColor="{StaticResource EmphasisHigh}" />
+					<Entry Grid.Column="3" Grid.Row="1" Placeholder="Telefone" Text="{Binding Client.Phone}" PlaceholderColor="{StaticResource EmphasisLow}" TextColor="{StaticResource EmphasisHigh}" BackgroundColor="{StaticResource DarkModeBox}" />
+					<Label Grid.Column="4" Grid.Row="0" Text="Celular" TextColor="{StaticResource EmphasisHigh}" />
+					<Entry Grid.Column="4" Grid.Row="1" Placeholder="Celular" Text="{Binding Client.CellPhone}" PlaceholderColor="{StaticResource EmphasisLow}" TextColor="{StaticResource EmphasisHigh}" BackgroundColor="{StaticResource DarkModeBox}" />
+					<Label Grid.Column="5" Grid.Row="0" Text="E-mail" TextColor="{StaticResource EmphasisHigh}" />
+					<Entry Grid.Column="5" Grid.Row="1" Placeholder="E-mail" Text="{Binding Client.Email}" PlaceholderColor="{StaticResource EmphasisLow}" TextColor="{StaticResource EmphasisHigh}" BackgroundColor="{StaticResource DarkModeBox}" />
+				</Grid>
+
+				<Grid ColumnDefinitions="*,300,100,200" RowDefinitions="Auto,Auto" ColumnSpacing="16" RowSpacing="12">
+					<Label Grid.Column="0" Grid.Row="0" Text="Endereço" TextColor="{StaticResource EmphasisHigh}" />
+					<Entry Grid.Column="0" Grid.Row="1" Placeholder="Endereço" Text="{Binding Client.Address}" PlaceholderColor="{StaticResource EmphasisLow}" TextColor="{StaticResource EmphasisHigh}" BackgroundColor="{StaticResource DarkModeBox}" />
+					<Label Grid.Column="1" Grid.Row="0" Text="Cidade" TextColor="{StaticResource EmphasisHigh}" />
+					<Entry Grid.Column="1" Grid.Row="1" Placeholder="Cidade" Text="{Binding Client.City}" PlaceholderColor="{StaticResource EmphasisLow}" TextColor="{StaticResource EmphasisHigh}" BackgroundColor="{StaticResource DarkModeBox}" />
+					<Label Grid.Column="2" Grid.Row="0" Text="Estado" TextColor="{StaticResource EmphasisHigh}" />
+					<Picker Grid.Column="2" Grid.Row="1" ItemsSource="{Binding Uf}" SelectedItem="{Binding Client.State}" TextColor="{StaticResource EmphasisHigh}" BackgroundColor="{StaticResource DarkModeBox}" />
+					<Label Grid.Column="3" Grid.Row="0" Text="CEP" TextColor="{StaticResource EmphasisHigh}" />
+					<Entry Grid.Column="3" Grid.Row="1" Placeholder="CEP" Text="{Binding Client.ZipCode}" PlaceholderColor="{StaticResource EmphasisLow}" TextColor="{StaticResource EmphasisHigh}" BackgroundColor="{StaticResource DarkModeBox}" />
+				</Grid>
+
+				<Grid ColumnDefinitions="*,*,315" RowDefinitions="Auto,Auto" ColumnSpacing="16" RowSpacing="12">
+					<Label Grid.Column="0" Grid.Row="0" Text="Profissão" TextColor="{StaticResource EmphasisHigh}" />
+					<Entry Grid.Column="0" Grid.Row="1" Placeholder="Profissão" Text="{Binding Client.Profession}" PlaceholderColor="{StaticResource EmphasisLow}" TextColor="{StaticResource EmphasisHigh}" BackgroundColor="{StaticResource DarkModeBox}" />
+					<Label Grid.Column="1" Grid.Row="0" Text="Empresa" TextColor="{StaticResource EmphasisHigh}" />
+					<Entry Grid.Column="1" Grid.Row="1" Placeholder="Empresa" Text="{Binding Client.Company}" PlaceholderColor="{StaticResource EmphasisLow}" TextColor="{StaticResource EmphasisHigh}" BackgroundColor="{StaticResource DarkModeBox}" />
+					<Label Grid.Column="2" Grid.Row="0" Text="Nacionalidade" TextColor="{StaticResource EmphasisHigh}" />
+					<Entry Grid.Column="2" Grid.Row="1" Placeholder="Nacionalidade" Text="{Binding Client.Nationality}" PlaceholderColor="{StaticResource EmphasisLow}" TextColor="{StaticResource EmphasisHigh}" BackgroundColor="{StaticResource DarkModeBox}" />
+				</Grid>
+
+				<Grid ColumnDefinitions="Auto,*">
+					<HorizontalStackLayout Grid.Column="0" HorizontalOptions="Start" Spacing="16" Padding="0,16">
+						<VerticalStackLayout>
+							<Label Text="Criado por:"  TextColor="{StaticResource EmphasisMedium}" FontSize="12"/>
+							<HorizontalStackLayout Spacing="4">
+								<Label Text="{Binding Client.CreatedBy}" TextColor="{StaticResource EmphasisHigh}" FontSize="12"/>
+								<Label Text="em" TextColor="{StaticResource EmphasisHigh}" FontSize="12"/>
+								<Label Text="{Binding Client.CreatedAt}" TextColor="{StaticResource EmphasisHigh}" FontSize="12"/>
+							</HorizontalStackLayout>
+						</VerticalStackLayout>
+						<VerticalStackLayout>
+							<Label Text="Ultima edição por:"  TextColor="{StaticResource EmphasisMedium}" FontSize="12"/>
+							<HorizontalStackLayout Spacing="4">
+								<Label Text="{Binding Client.UpdatedBy}" TextColor="{StaticResource EmphasisHigh}" FontSize="12"/>
+								<Label Text="em" TextColor="{StaticResource EmphasisHigh}" FontSize="12"/>
+								<Label Text="{Binding Client.UpdatedAt}" TextColor="{StaticResource EmphasisHigh}" FontSize="12"/>
+							</HorizontalStackLayout>
+						</VerticalStackLayout>
+					</HorizontalStackLayout>
+
+					<HorizontalStackLayout Grid.Column="1" HorizontalOptions="End" Spacing="16" Padding="0,16">
+						<Button Text="Cancelar" BackgroundColor="{StaticResource CancelButton}" TextColor="{StaticResource EmphasisHigh}" Command="{Binding CancelCommand}" CornerRadius="3" WidthRequest="100" />
+						<Button Text="Atualizar" BackgroundColor="{StaticResource ConfirmButton}" TextColor="{StaticResource EmphasisHigh}" Command="{Binding SaveCommand}" CornerRadius="3" WidthRequest="100" />
+					</HorizontalStackLayout>
+				</Grid>
+			</StackLayout>
+		</ScrollView>
+
+		<BoxView Grid.Column="1" BackgroundColor="{StaticResource DarkModeDivider}"/>
+
+		<StackLayout Grid.Column="2" Padding="24,20,0,24" Spacing="24">
+			<Label Text="Ações rápidas" FontSize="24" TextColor="{StaticResource EmphasisHigh}" HorizontalOptions="Start" Padding="0,16"/>
+			<Button Text="Ver Processos" BackgroundColor="{StaticResource PrimaryButton}" TextColor="{StaticResource EmphasisHigh}" Command="{Binding SaveCommand}" CornerRadius="3" />
+			<Button Text="Ver Prazos" BackgroundColor="{StaticResource PrimaryButton}" TextColor="{StaticResource EmphasisHigh}" Command="{Binding SaveCommand}" CornerRadius="3" />
+			<Button Text="Arquivos do Cliente" BackgroundColor="{StaticResource PrimaryButton}" TextColor="{StaticResource EmphasisHigh}" Command="{Binding SaveCommand}" CornerRadius="3" />
+			<Button Text="Gerenciar Contratos" BackgroundColor="{StaticResource PrimaryButton}" TextColor="{StaticResource EmphasisHigh}" Command="{Binding SaveCommand}" CornerRadius="3" />
+			<Button Text="Gerar Relatório" BackgroundColor="{StaticResource PrimaryButton}" TextColor="{StaticResource EmphasisHigh}" Command="{Binding SaveCommand}" CornerRadius="3" />
+		</StackLayout>
+	</Grid>
+</ContentPage>

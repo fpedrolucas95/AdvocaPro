@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:AdvocaPro.ViewModel"
+             x:Class="AdvocaPro.View.LoginPageView"
+             BackgroundColor="{StaticResource DarkModeBackground}"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="*, Auto" Padding="30">
+		<VerticalStackLayout Spacing="30" VerticalOptions="Center" Grid.Row="0">
+			<Label Text="Bem-vindo de volta"
+                   FontSize="28"
+                   TextColor="{StaticResource EmphasisHigh}"
+                   HorizontalOptions="Center"
+                   FontAttributes="Bold" />
+
+            <Frame BackgroundColor="{StaticResource DarkModeBox}" CornerRadius="10" Padding="15" HasShadow="False">
+				<VerticalStackLayout Spacing="15">
+					<VerticalStackLayout Spacing="5">
+                        <Label Text="Username" FontSize="14" TextColor="{StaticResource EmphasisMedium}" />
+						<Entry Placeholder="Digite seu username"
+                               Text="{Binding Username}"
+                               TextColor="{StaticResource EmphasisHigh}"
+                               PlaceholderColor="{StaticResource EmphasisLow}"
+                               Keyboard="Email"
+                               BackgroundColor="Transparent" />
+					</VerticalStackLayout>
+
+					<VerticalStackLayout Spacing="5">
+                        <Label Text="Senha" FontSize="14" TextColor="{StaticResource EmphasisMedium}" />
+						<Entry Placeholder="Digite sua senha"
+                               Text="{Binding Password}"
+                               IsPassword="True"
+                               TextColor="{StaticResource EmphasisHigh}"
+                               PlaceholderColor="{StaticResource EmphasisLow}"
+                               BackgroundColor="Transparent" />
+					</VerticalStackLayout>
+				</VerticalStackLayout>
+			</Frame>
+
+			<Button Text="ENTRAR"
+                    BackgroundColor="{StaticResource PrimaryButton}"
+                    TextColor="{StaticResource EmphasisHigh}"
+                    CornerRadius="10"
+                    HeightRequest="50"
+                    FontAttributes="Bold"
+                    Command="{Binding LoginCommand}" />
+
+			<Label Text="Esqueceu a senha?"
+                   TextColor="{StaticResource EmphasisMedium}"
+                   HorizontalOptions="Center"
+                   FontSize="14">
+				<Label.GestureRecognizers>
+					<TapGestureRecognizer Command="{Binding ForgotPasswordCommand}" />
+				</Label.GestureRecognizers>
+			</Label>
+		</VerticalStackLayout>
+
+		<Label Text="© 2024 Sua Empresa"
+               TextColor="{StaticResource EmphasisMedium}"
+               HorizontalOptions="Center"
+               FontSize="12"
+               Grid.Row="1" />
+	</Grid>
+</ContentPage>

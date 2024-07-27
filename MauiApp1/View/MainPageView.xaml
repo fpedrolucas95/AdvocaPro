@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:viewmodel="clr-namespace:AdvocaPro.ViewModel"
+       xmlns:views="clr-namespace:AdvocaPro.View"
+       x:Class="AdvocaPro.View.MainPage"
+       FlyoutBehavior="Flyout"
+       Shell.NavBarIsVisible="False"
+       Shell.FlyoutBehavior="Disabled"
+       Shell.TabBarBackgroundColor="{StaticResource DarkModeBox}">
+
+    <Shell.BindingContext>
+        <viewmodel:MainPageViewModel />
+    </Shell.BindingContext>
+
+    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
+        <ShellContent Title="Home"
+                      ContentTemplate="{DataTemplate views:WelcomeView}" 
+                      Route="WelcomeView" />
+        <ShellContent Title="Clientes"
+                      ContentTemplate="{DataTemplate views:ClientView}"
+                      Route="ClientView" />
+        <ShellContent Title="Processos"
+                      ContentTemplate="{DataTemplate views:CasesView}"
+                      Route="CasesView" />
+        <ShellContent Title="Prazos"
+                      ContentTemplate="{DataTemplate views:DeadlineManagementView}"
+                      Route="DeadlineManagementView" />
+    </FlyoutItem>
+
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <Grid Padding="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Image Source="{Binding Icon}" 
+                       HeightRequest="30" 
+                       WidthRequest="30" />
+                <Label Grid.Column="1"
+                       Text="{Binding Title}" 
+                       FontSize="18"
+                       VerticalOptions="Center" />
+            </Grid>
+        </DataTemplate>
+    </Shell.ItemTemplate>
+
+</Shell>

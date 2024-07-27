@@ -1,0 +1,143 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:AdvocaPro.ViewModel"
+             xmlns:converters="clr-namespace:AdvocaPro.Converters"
+             x:Class="AdvocaPro.View.DeadlineManagementView"
+             Title="Gerenciamento de Prazos">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BooleanToYesNoConverter x:Key="BoolToYesNo"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid ColumnDefinitions="*,600" RowDefinitions="60,48,*" Padding="24,8">
+        <Label Grid.Column="0" Grid.Row="0" Text="Prazos" FontSize="24" TextColor="{StaticResource EmphasisHigh}" HorizontalOptions="Start" VerticalOptions="Center" />
+        <HorizontalStackLayout Grid.Column="1" Grid.Row="0" Spacing="24" HorizontalOptions="End" Padding="8">
+            <VerticalStackLayout>
+                <Label Text="Total de Prazos" FontSize="12" TextColor="{StaticResource EmphasisMedium}"/>
+                <Label Text="{Binding TotalDeadlines}" FontSize="12" TextColor="{StaticResource EmphasisHigh}"/>
+            </VerticalStackLayout>
+            <VerticalStackLayout>
+                <Label Text="Total Concluídos" FontSize="12" TextColor="{StaticResource EmphasisMedium}"/>
+                <Label Text="{Binding TotalCompleted}" FontSize="12" TextColor="{StaticResource EmphasisHigh}"/>
+            </VerticalStackLayout>
+            <VerticalStackLayout>
+                <Label Text="Vence Hoje" FontSize="12" TextColor="{StaticResource EmphasisMedium}"/>
+                <Label Text="{Binding TotalDueToday}" FontSize="12" TextColor="{StaticResource EmphasisHigh}"/>
+            </VerticalStackLayout>
+            <VerticalStackLayout>
+                <Label Text="Vence Essa Semana" FontSize="12" TextColor="{StaticResource EmphasisMedium}"/>
+                <Label Text="{Binding TotalDueThisWeek}" FontSize="12" TextColor="{StaticResource EmphasisHigh}"/>
+            </VerticalStackLayout>
+            <VerticalStackLayout>
+                <Label Text="Atrasados" FontSize="12" TextColor="{StaticResource EmphasisMedium}"/>
+                <Label Text="{Binding TotalOverdue}" FontSize="12" TextColor="{StaticResource EmphasisHigh}"/>
+            </VerticalStackLayout>
+        </HorizontalStackLayout>
+
+        <HorizontalStackLayout Grid.ColumnSpan="2" Grid.Row="1" Spacing="10">
+            <Button Text="Adicionar Novo"
+                    Command="{Binding OpenAddDeadlineFormCommand}"
+                    BackgroundColor="{StaticResource ConfirmButton}"
+                    TextColor="{StaticResource EmphasisHigh}"
+                    CornerRadius="2"/>
+            <Button Text="Excluir"
+                    Command="{Binding DeleteDeadlineCommand}"
+                    BackgroundColor="{Binding DeleteButtonBackgroundColor}"
+                    TextColor="{Binding DeleteButtonTextColor}"
+                    CornerRadius="2"
+                    IsEnabled="{Binding CanExecuteDeadlineRelatedCommands}"/>
+            <Button Text="Detalhes"
+                    Command="{Binding ToggleSummaryCommand}"
+                    BackgroundColor="{Binding DetailsButtonBackgroundColor}"
+                    TextColor="{Binding DetailsButtonTextColor}"
+                    CornerRadius="2"
+                    IsEnabled="{Binding CanExecuteDeadlineRelatedCommands}"/>
+        </HorizontalStackLayout>
+
+        <Entry Grid.Row="1" Grid.ColumnSpan="2" WidthRequest="360" HeightRequest="32" HorizontalOptions="End" VerticalOptions="Center" Placeholder="Pesquisar prazos" Text="{Binding SearchText}"/>
+
+        <Border Grid.Row="2" Grid.ColumnSpan="{Binding DataGridColumnSpan}" Margin="0,24,0,60" BackgroundColor="{StaticResource EmphasisLow}" Stroke="{StaticResource DarkModeHeader}">
+            <CollectionView ItemsSource="{Binding Deadlines}" SelectionMode="Single" SelectedItem="{Binding SelectedDeadline}">
+                <CollectionView.Header>
+                    <Grid ColumnDefinitions="350,190,110,105,110,85,89,150" Padding="8" BackgroundColor="{StaticResource DarkModeHeader}">
+                        <Label Grid.Column="0" Text="Nome" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource EmphasisHigh}"/>
+                        <Label Grid.Column="1" Text="Número do Processo" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource EmphasisHigh}"/>
+                        <Label Grid.Column="2" Text="Início" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource EmphasisHigh}"/>
+                        <Label Grid.Column="3" Text="Fim" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource EmphasisHigh}"/>
+                        <Label Grid.Column="4" Text="Prazo (dias)" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource EmphasisHigh}"/>
+                        <Label Grid.Column="5" Text="Dias Úteis" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource EmphasisHigh}"/>
+                        <Label Grid.Column="6" Text="Concluído" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource EmphasisHigh}"/>
+                        <Label Grid.Column="7" Text="Situação" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource EmphasisHigh}"/>
+                    </Grid>
+                </CollectionView.Header>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid ColumnDefinitions="345,180,100,100,100,80,80,150" Padding="8" ColumnSpacing="8">
+                            <Label Grid.Column="0" Text="{Binding Client.Name}" TextColor="{StaticResource EmphasisHigh}" FontSize="13" LineBreakMode="TailTruncation"/>
+                            <Label Grid.Column="1" Text="{Binding Client.ProcessNumber}" TextColor="{StaticResource EmphasisHigh}" FontSize="13" LineBreakMode="TailTruncation"/>
+                            <Label Grid.Column="2" Text="{Binding StartDate, StringFormat='{0:dd/MM/yyyy}'}" TextColor="{StaticResource EmphasisHigh}" FontSize="13" LineBreakMode="TailTruncation"/>
+                            <Label Grid.Column="3" Text="{Binding EndDate, StringFormat='{0:dd/MM/yyyy}'}" TextColor="{StaticResource EmphasisHigh}" FontSize="13"/>
+                            <Label Grid.Column="4" Text="{Binding DurationDays}" TextColor="{StaticResource EmphasisHigh}" FontSize="13"/>
+                            <Label Grid.Column="5" Text="{Binding IsBusinessDays, Converter={StaticResource BoolToYesNo}}" TextColor="{StaticResource EmphasisHigh}" FontSize="13"/>
+                            <Label Grid.Column="6" Text="{Binding IsCompleted, Converter={StaticResource BoolToYesNo}}" TextColor="{StaticResource EmphasisHigh}" FontSize="13"/>
+                            <Label Grid.Column="7" Text="{Binding Status}" TextColor="{StaticResource EmphasisHigh}" FontSize="13"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Border>
+
+        <ScrollView Grid.Row="2" Grid.Column="1" IsVisible="{Binding IsScrollViewVisible}">
+            <StackLayout>
+                <StackLayout Padding="20" Spacing="12" MinimumWidthRequest="400" IsVisible="{Binding IsAddDeadlineVisible}">
+                    <Label Text="Novo Prazo" FontSize="24" TextColor="{StaticResource EmphasisHigh}" HorizontalOptions="Start" Padding="0,16"/>
+
+                    <Label Grid.Column="0" Grid.Row="0" Text="Nome" TextColor="{StaticResource EmphasisHigh}" />
+                    <Picker Grid.Column="0" Grid.Row="1" x:Name="ClientPicker" ItemsSource="{Binding ClientPickerItems}" ItemDisplayBinding="{Binding Name}" SelectedItem="{Binding SelectedClientPickerItem, Mode=TwoWay}"/>
+
+                    <Grid ColumnDefinitions="110,*,*" RowDefinitions="Auto,Auto" ColumnSpacing="32" RowSpacing="12">
+                        <Label Grid.Column="0" Grid.Row="0" Text="Início" TextColor="{StaticResource EmphasisHigh}" />
+                        <DatePicker Grid.Column="0" Grid.Row="1" Date="{Binding NewDeadline.StartDate}" TextColor="{StaticResource EmphasisHigh}" BackgroundColor="{StaticResource DarkModeBox}" />
+                        <Label Grid.Column="1" Grid.Row="0" Text="Dias" TextColor="{StaticResource EmphasisHigh}" />
+                        <Entry Grid.Column="1" Grid.Row="1" Placeholder="Dias" Text="{Binding NewDeadline.DurationDays}" PlaceholderColor="{StaticResource EmphasisLow}" TextColor="{StaticResource EmphasisHigh}" BackgroundColor="{StaticResource DarkModeBox}" Keyboard="Numeric" />
+                        <Label Grid.Column="2" Grid.Row="0" Text="Dias Úteis" TextColor="{StaticResource EmphasisHigh}" />
+                        <Picker Grid.Column="2" Grid.Row="1" ItemsSource="{Binding IsBusinessDaysOptions}" SelectedItem="{Binding IsBusinessDaysString}" TextColor="{StaticResource EmphasisHigh}" BackgroundColor="{StaticResource DarkModeBox}" />
+                    </Grid>
+
+                    <HorizontalStackLayout HorizontalOptions="End" Spacing="16" Padding="0,16">
+                        <Button Text="Cancelar" BackgroundColor="{StaticResource CancelButton}" TextColor="{StaticResource EmphasisHigh}" Command="{Binding CloseAddDeadlineFormCommand}" CornerRadius="3" WidthRequest="100" />
+                        <Button Text="Salvar" BackgroundColor="{StaticResource ConfirmButton}" TextColor="{StaticResource EmphasisHigh}" Command="{Binding AddDeadlineCommand}" CornerRadius="3" WidthRequest="100" />
+                    </HorizontalStackLayout>
+                </StackLayout>
+
+                <StackLayout Padding="20" Spacing="12" MinimumWidthRequest="400" IsVisible="{Binding IsDetailVisible}">
+                    <Label Text="Detalhes" FontSize="24" TextColor="{StaticResource EmphasisHigh}" HorizontalOptions="Start" Padding="0,16,0,8"/>
+
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,*" ColumnSpacing="16" RowSpacing="8">
+                        <Label Grid.Column="0" Grid.Row="0" Text="{Binding SelectedDeadline.Client.Name}" FontSize="20" TextColor="{StaticResource EmphasisHigh}" HorizontalOptions="Start" />
+                        <HorizontalStackLayout Grid.Column="0" Grid.Row="1" Spacing="16">
+                            <Label Text="{Binding SelectedDeadline.Client.ProcessNumber}" FontSize="14" TextColor="{StaticResource EmphasisHigh}" HorizontalOptions="Start" />
+                            <Label Text="{Binding SelectedDeadline.Status}" FontSize="14" TextColor="{StaticResource EmphasisHigh}" HorizontalOptions="Start" />
+                        </HorizontalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" HorizontalOptions="End" Grid.RowSpan="2" Spacing="4" Margin="0,-10">
+                            <Label Text="Concluído" TextColor="{StaticResource EmphasisHigh}" />
+                            <Picker ItemsSource="{Binding IsCompletedOptions}" SelectedItem="{Binding IsCompletedString}" TextColor="{StaticResource EmphasisHigh}" BackgroundColor="{StaticResource DarkModeBox}" WidthRequest="80"/>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <Label Text="Detalhes" TextColor="{StaticResource EmphasisHigh}" Margin="0,24,0,0"/>
+                    <Grid HeightRequest="250">
+                        <Editor Text="{Binding SelectedDeadline.Details}" Placeholder="Detalhes" PlaceholderColor="{StaticResource EmphasisLow}" TextColor="{StaticResource EmphasisHigh}" BackgroundColor="{StaticResource DarkModeBox}" AutoSize="TextChanges"/>
+                    </Grid>
+
+                    <HorizontalStackLayout HorizontalOptions="End" Spacing="16" Padding="0,16">
+                        <Button Text="Cancelar" BackgroundColor="{StaticResource CancelButton}" TextColor="{StaticResource EmphasisHigh}" Command="{Binding CloseDetailFormCommand}" CornerRadius="3" WidthRequest="100" />
+                        <Button Text="Salvar" BackgroundColor="{StaticResource ConfirmButton}" TextColor="{StaticResource EmphasisHigh}" Command="{Binding SaveDetailCommand}" CornerRadius="3" WidthRequest="100" />
+                    </HorizontalStackLayout>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>
