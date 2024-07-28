@@ -18,6 +18,16 @@
 		<FileVersion>0.2.0.0</FileVersion>
 		<PackageReleaseNotes>Versão inicial apenas para testes, não utilize no dia a dia.</PackageReleaseNotes>
 		<PackageProjectUrl>https://github.com/fpedrolucas95/AdvocaPro</PackageProjectUrl>
+		<BaseOutputPath>C:\Users\fpedr\Documents\AdvocaPro</BaseOutputPath>
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<GenerateAppInstallerFile>False</GenerateAppInstallerFile>
+		<AppxPackageSigningEnabled>False</AppxPackageSigningEnabled>
+		<AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
+		<AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+		<AppxPackageDir>C:\Users\fpedr\Documents\AdvocaPro\AppPackages\</AppxPackageDir>
+		<AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
+		<GenerateTestArtifacts>True</GenerateTestArtifacts>
+		<HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
