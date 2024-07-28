@@ -158,8 +158,6 @@ namespace AdvocaPro.ViewModel
         public string DetailsButtonBackgroundColor => CanExecuteClientRelatedCommands ? DETAILS_BUTTON_ACTIVE_COLOR : DETAILS_BUTTON_INACTIVE_COLOR;
 
         public string DetailsButtonTextColor => CanExecuteClientRelatedCommands ? TEXT_COLOR_ACTIVE : TEXT_COLOR_INACTIVE;
-
-        public ObservableCollection<DataGridColumn<Client>> ClientColumnDefinitions { get; set; }
         #endregion
 
         #region Constructor

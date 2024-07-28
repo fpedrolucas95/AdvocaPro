@@ -14,6 +14,18 @@
 		<ApplicationVersion>1</ApplicationVersion>
 		<SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+		<Version>0.2</Version>
+		<FileVersion>0.2.0.0</FileVersion>
+		<PackageReleaseNotes>Versão inicial apenas para testes, não utilize no dia a dia.</PackageReleaseNotes>
+		<PackageProjectUrl>https://github.com/fpedrolucas95/AdvocaPro</PackageProjectUrl>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <ApplicationDisplayVersion>0.2.0</ApplicationDisplayVersion>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <ApplicationDisplayVersion>0.2.0</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
