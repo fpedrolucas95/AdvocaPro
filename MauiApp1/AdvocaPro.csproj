@@ -19,23 +19,32 @@
 		<PackageReleaseNotes>Versão inicial apenas para testes, não utilize no dia a dia.</PackageReleaseNotes>
 		<PackageProjectUrl>https://github.com/fpedrolucas95/AdvocaPro</PackageProjectUrl>
 		<BaseOutputPath>C:\Users\fpedr\Documents\AdvocaPro</BaseOutputPath>
-		<PlatformTarget>AnyCPU</PlatformTarget>
+		<PlatformTarget>x64</PlatformTarget>
 		<GenerateAppInstallerFile>False</GenerateAppInstallerFile>
 		<AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
 		<AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
-		<AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+		<AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
 		<AppxPackageDir>C:\Users\fpedr\Documents\AdvocaPro\AppPackages\</AppxPackageDir>
 		<AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
 		<GenerateTestArtifacts>True</GenerateTestArtifacts>
 		<HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
 		<PackageCertificateThumbprint>66188760366C7244AFF9161869F8ABABB3094915</PackageCertificateThumbprint>
+		<DefaultLanguage>pt-BR</DefaultLanguage>
+		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+		<SelfContained>true</SelfContained>
+		<Platforms>x64</Platforms>
+		<Configurations>Debug;Release;AdvocaPro</Configurations>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-	  <ApplicationDisplayVersion>0.2.0</ApplicationDisplayVersion>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+		<ApplicationDisplayVersion>0.2.0</ApplicationDisplayVersion>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+		<ApplicationDisplayVersion>0.2.0</ApplicationDisplayVersion>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='AdvocaPro|x64'">
 	  <ApplicationDisplayVersion>0.2.0</ApplicationDisplayVersion>
 	</PropertyGroup>
 
@@ -77,13 +86,13 @@
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="View\CasesView.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="View\ClientView.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="View\DeadlineManagementView.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="View\LoginPageView.xaml">
 			<Generator>MSBuild:Compile</Generator>
@@ -92,7 +101,7 @@
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="View\ClientProfileView.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="View\WelcomeView.xaml">
 			<Generator>MSBuild:Compile</Generator>
@@ -100,8 +109,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="View\ClientProfileView.xaml.cs">
-	    <DependentUpon>ClientProfileView.xaml</DependentUpon>
-	  </Compile>
+		<Compile Update="View\ClientProfileView.xaml.cs">
+			<DependentUpon>ClientProfileView.xaml</DependentUpon>
+		</Compile>
 	</ItemGroup>
 </Project>
