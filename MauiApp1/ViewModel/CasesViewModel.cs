@@ -148,6 +148,8 @@ public partial class CasesViewModel : ObservableObject
         var loggedInUser = _loginService.GetLoggedInUser();
         _currentUser = loggedInUser?.UserName ?? "Desconhecido";
 
+        _clientService.ClientAdded += OnClientAdded;
+
         Task.Run(async () =>
         {
             await LoadProcessTypesAsync();
@@ -306,6 +308,11 @@ public partial class CasesViewModel : ObservableObject
     #endregion
 
     #region Private Methods
+    private void OnClientAdded(object sender, Client client)
+    {
+        ClientPickerItems.Add(new ClientPickerItem { Id = client.Id, Name = client.Name });
+    }
+
     private void UpdateCasesList(IEnumerable<Case> cases)
     {
         Cases.Clear();

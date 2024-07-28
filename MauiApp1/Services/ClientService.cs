@@ -6,6 +6,7 @@ namespace AdvocaPro.Services
     public class ClientService
     {
         private readonly string _databasePath;
+        public event EventHandler<Client>? ClientAdded;
 
         public ClientService(string databasePath)
         {
@@ -80,6 +81,12 @@ namespace AdvocaPro.Services
                     transaction.Commit();
                 }
             }
+            OnClientAdded(client);
+        }
+
+        protected virtual void OnClientAdded(Client client)
+        {
+            ClientAdded?.Invoke(this, client);
         }
 
         public void UpdateClient(Client client)

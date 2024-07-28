@@ -230,7 +230,6 @@ namespace AdvocaPro.ViewModel
             }
         }
 
-
         [RelayCommand(CanExecute = nameof(CanExecuteClientRelatedCommands))]
         private async Task DeleteClientAsync()
         {

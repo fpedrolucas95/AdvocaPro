@@ -43,34 +43,31 @@ namespace AdvocaPro.Services
             using var connection = new SqliteConnection($"Filename={_databasePath}");
             connection.Open();
 
-            if (caseRecord.ClientId <= 0)
-            {
-                throw new ArgumentException("ClientId must be a positive integer.", nameof(caseRecord.ClientId));
-            }
-
-            var clientCheckCommand = connection.CreateCommand();
-            clientCheckCommand.CommandText = "SELECT COUNT(*) FROM Clients WHERE Id = @ClientId";
-            clientCheckCommand.Parameters.AddWithValue("@ClientId", caseRecord.ClientId);
-
-            var clientCount = clientCheckCommand.ExecuteScalar();
-            if (clientCount is null || Convert.ToInt64(clientCount) <= 0)
-            {
-                throw new Exception($"Client with Id {caseRecord.ClientId} does not exist.");
-            }
-
             using var transaction = connection.BeginTransaction();
             var command = connection.CreateCommand();
             command.CommandText = @"
-                INSERT INTO Cases (
-                    ClientId, Court, Opponent, CaseDetails, CaseObservation, 
-                    CaseCompleted, CreatedAt, CreatedBy, UpdatedAt, UpdatedBy
-                ) VALUES (
-                    @ClientId, @Court, @Opponent, @CaseDetails, @CaseObservation, 
-                    @CaseCompleted, @CreatedAt, @CreatedBy, @UpdatedAt, @UpdatedBy
-                )";
+        INSERT INTO Cases (
+            ClientId, Court, Opponent, CaseDetails, CaseObservation, 
+            CaseCompleted, CreatedAt, CreatedBy, UpdatedAt, UpdatedBy
+        ) VALUES (
+            @ClientId, @Court, @Opponent, @CaseDetails, @CaseObservation, 
+            @CaseCompleted, @CreatedAt, @CreatedBy, @UpdatedAt, @UpdatedBy
+        )";
 
             AddParametersToCommand(command, caseRecord);
             command.ExecuteNonQuery();
+
+            var clientCommand = connection.CreateCommand();
+            clientCommand.CommandText = @"
+        UPDATE Clients
+        SET ProcessNumber = @ProcessNumber, ProcessType = @ProcessType
+        WHERE Id = @ClientId";
+
+            clientCommand.Parameters.AddWithValue("@ProcessNumber", caseRecord.Client.ProcessNumber);
+            clientCommand.Parameters.AddWithValue("@ProcessType", caseRecord.Client.ProcessType);
+            clientCommand.Parameters.AddWithValue("@ClientId", caseRecord.ClientId);
+            clientCommand.ExecuteNonQuery();
+
             transaction.Commit();
         }
 
@@ -78,18 +75,31 @@ namespace AdvocaPro.Services
         {
             using var connection = new SqliteConnection($"Filename={_databasePath}");
             connection.Open();
+
             using var transaction = connection.BeginTransaction();
             var command = connection.CreateCommand();
             command.CommandText = @"
-                UPDATE Cases SET
-                    ClientId = @ClientId, Court = @Court, Opponent = @Opponent, 
-                    CaseDetails = @CaseDetails, CaseObservation = @CaseObservation, 
-                    CaseCompleted = @CaseCompleted, UpdatedAt = @UpdatedAt, UpdatedBy = @UpdatedBy
-                WHERE Id = @Id";
+        UPDATE Cases SET
+            ClientId = @ClientId, Court = @Court, Opponent = @Opponent, 
+            CaseDetails = @CaseDetails, CaseObservation = @CaseObservation, 
+            CaseCompleted = @CaseCompleted, UpdatedAt = @UpdatedAt, UpdatedBy = @UpdatedBy
+        WHERE Id = @Id";
 
             AddParametersToCommand(command, caseRecord);
             command.Parameters.AddWithValue("@Id", caseRecord.Id);
             command.ExecuteNonQuery();
+
+            var clientCommand = connection.CreateCommand();
+            clientCommand.CommandText = @"
+        UPDATE Clients
+        SET ProcessNumber = @ProcessNumber, ProcessType = @ProcessType
+        WHERE Id = @ClientId";
+
+            clientCommand.Parameters.AddWithValue("@ProcessNumber", caseRecord.Client.ProcessNumber);
+            clientCommand.Parameters.AddWithValue("@ProcessType", caseRecord.Client.ProcessType);
+            clientCommand.Parameters.AddWithValue("@ClientId", caseRecord.ClientId);
+            clientCommand.ExecuteNonQuery();
+
             transaction.Commit();
         }
 
@@ -97,11 +107,13 @@ namespace AdvocaPro.Services
         {
             using var connection = new SqliteConnection($"Filename={_databasePath}");
             connection.Open();
+
             using var transaction = connection.BeginTransaction();
             var command = connection.CreateCommand();
             command.CommandText = "DELETE FROM Cases WHERE Id = @Id";
             command.Parameters.AddWithValue("@Id", id);
             command.ExecuteNonQuery();
+
             transaction.Commit();
         }
 
@@ -120,14 +132,28 @@ namespace AdvocaPro.Services
             using var reader = command.ExecuteReader();
             while (reader.Read())
             {
-                var caseRecord = ReadCaseFromReader(reader);
-                caseRecord.Client = new Client
+                var caseRecord = new Case
                 {
-                    Id = reader.GetInt32(reader.GetOrdinal("ClientId")),
-                    Name = reader.GetString(reader.GetOrdinal("ClientName")),
-                    ProcessNumber = reader.GetString(reader.GetOrdinal("ProcessNumber")),
-                    ProcessType = reader.GetString(reader.GetOrdinal("ProcessType"))
+                    Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                    ClientId = reader.GetInt32(reader.GetOrdinal("ClientId")),
+                    Client = new Client
+                    {
+                        Id = reader.GetInt32(reader.GetOrdinal("ClientId")),
+                        Name = reader.GetString(reader.GetOrdinal("ClientName")),
+                        ProcessNumber = reader.GetString(reader.GetOrdinal("ProcessNumber")),
+                        ProcessType = reader.GetString(reader.GetOrdinal("ProcessType"))
+                    },
+                    Court = reader.GetString(reader.GetOrdinal("Court")),
+                    Opponent = reader.GetString(reader.GetOrdinal("Opponent")),
+                    CaseDetails = reader.IsDBNull(reader.GetOrdinal("CaseDetails")) ? string.Empty : reader.GetString(reader.GetOrdinal("CaseDetails")),
+                    CaseObservation = reader.IsDBNull(reader.GetOrdinal("CaseObservation")) ? string.Empty : reader.GetString(reader.GetOrdinal("CaseObservation")),
+                    CaseCompleted = reader.GetInt32(reader.GetOrdinal("CaseCompleted")) == 1,
+                    CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt")),
+                    CreatedBy = reader.IsDBNull(reader.GetOrdinal("CreatedBy")) ? string.Empty : reader.GetString(reader.GetOrdinal("CreatedBy")),
+                    UpdatedAt = reader.IsDBNull(reader.GetOrdinal("UpdatedAt")) ? null : reader.GetDateTime(reader.GetOrdinal("UpdatedAt")),
+                    UpdatedBy = reader.IsDBNull(reader.GetOrdinal("UpdatedBy")) ? string.Empty : reader.GetString(reader.GetOrdinal("UpdatedBy"))
                 };
+
                 cases.Add(caseRecord);
             }
 
@@ -146,24 +172,6 @@ namespace AdvocaPro.Services
             command.Parameters.AddWithValue("@CreatedBy", caseRecord.CreatedBy ?? (object)DBNull.Value);
             command.Parameters.AddWithValue("@UpdatedAt", caseRecord.UpdatedAt ?? (object)DBNull.Value);
             command.Parameters.AddWithValue("@UpdatedBy", caseRecord.UpdatedBy ?? (object)DBNull.Value);
-        }
-
-        private Case ReadCaseFromReader(SqliteDataReader reader)
-        {
-            return new Case
-            {
-                Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                ClientId = reader.GetInt32(reader.GetOrdinal("ClientId")),
-                Court = reader.GetString(reader.GetOrdinal("Court")),
-                Opponent = reader.GetString(reader.GetOrdinal("Opponent")),
-                CaseDetails = reader.IsDBNull(reader.GetOrdinal("CaseDetails")) ? string.Empty : reader.GetString(reader.GetOrdinal("CaseDetails")),
-                CaseObservation = reader.IsDBNull(reader.GetOrdinal("CaseObservation")) ? string.Empty : reader.GetString(reader.GetOrdinal("CaseObservation")),
-                CaseCompleted = reader.GetInt32(reader.GetOrdinal("CaseCompleted")) == 1,
-                CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt")),
-                CreatedBy = reader.IsDBNull(reader.GetOrdinal("CreatedBy")) ? string.Empty : reader.GetString(reader.GetOrdinal("CreatedBy")),
-                UpdatedAt = reader.IsDBNull(reader.GetOrdinal("UpdatedAt")) ? null : reader.GetDateTime(reader.GetOrdinal("UpdatedAt")),
-                UpdatedBy = reader.IsDBNull(reader.GetOrdinal("UpdatedBy")) ? string.Empty : reader.GetString(reader.GetOrdinal("UpdatedBy"))
-            };
         }
     }
 }
