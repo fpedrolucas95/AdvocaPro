@@ -23,7 +23,7 @@
 		<GenerateAppInstallerFile>False</GenerateAppInstallerFile>
 		<AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
 		<AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
-		<AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+		<AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
 		<AppxPackageDir>C:\Users\fpedr\Documents\AdvocaPro\AppPackages\</AppxPackageDir>
 		<AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
 		<GenerateTestArtifacts>True</GenerateTestArtifacts>
@@ -34,6 +34,7 @@
 		<SelfContained>true</SelfContained>
 		<Platforms>x64</Platforms>
 		<Configurations>Debug;Release;AdvocaPro</Configurations>
+		<AppxPackageSigningTimestampServerUrl>https://freetsa.org</AppxPackageSigningTimestampServerUrl>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

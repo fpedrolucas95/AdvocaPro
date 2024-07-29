@@ -69,7 +69,7 @@
 
         <Entry Grid.Row="1" Grid.ColumnSpan="2" WidthRequest="360" HeightRequest="32" HorizontalOptions="End" VerticalOptions="Center" Placeholder="Pesquisar clientes" Text="{Binding SearchText}"/>
 
-        <Border Grid.Row="2" Grid.ColumnSpan="{Binding DataGridColumnSpan}" Margin="0,24,0,60" BackgroundColor="{StaticResource EmphasisLow}" Stroke="{StaticResource DarkModeHeader}">
+        <Border Grid.Row="2" Grid.ColumnSpan="{Binding DataGridColumnSpan}" Margin="0,24" BackgroundColor="{StaticResource EmphasisLow}" Stroke="{StaticResource DarkModeHeader}">
             <ScrollView>
                 <CollectionView ItemsSource="{Binding Clients}" SelectionMode="Single" SelectedItem="{Binding SelectedClient}">
                     <CollectionView.Header>

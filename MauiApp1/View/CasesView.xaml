@@ -50,7 +50,7 @@
 
 		<Entry Grid.Row="1" Grid.ColumnSpan="2" WidthRequest="360" HeightRequest="32" HorizontalOptions="End" VerticalOptions="Center" Placeholder="Pesquisar processos" Text="{Binding SearchText}"/>
 
-		<Border Grid.Row="2" Grid.ColumnSpan="{Binding DataGridColumnSpan}" Margin="0,24,0,60" BackgroundColor="{StaticResource EmphasisLow}" Stroke="{StaticResource DarkModeHeader}">
+        <Border Grid.Row="2" Grid.ColumnSpan="{Binding DataGridColumnSpan}" Margin="0,24" BackgroundColor="{StaticResource EmphasisLow}" Stroke="{StaticResource DarkModeHeader}">
 			<CollectionView ItemsSource="{Binding Cases}" SelectionMode="Single" SelectedItem="{Binding SelectedCase}">
 				<CollectionView.Header>
                     <Grid ColumnDefinitions="350,190,155,190,260,155,110" Padding="8" BackgroundColor="{StaticResource DarkModeHeader}">

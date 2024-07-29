@@ -26,8 +26,6 @@ namespace AdvocaPro
                 .ConfigureLifecycleEvents(events =>
                 {
 #if WINDOWS
-                    //TODO: [PEDRO] Rever essa lógica em breve pois tem bug
-                    //JANELA PRINCIPAL SEM TITULO E NÃO DIMENSIONAVEL MAS FUNCIONA PARA A TELA DE LOGIN
                     events.AddWindows(windows =>
                     {
                         windows.OnWindowCreated(window =>
@@ -37,13 +35,12 @@ namespace AdvocaPro
                             var appWindow = AppWindow.GetFromWindowId(windowId);
                             var displayArea = DisplayArea.GetFromWindowId(windowId, DisplayAreaFallback.Primary);
                             var workArea = displayArea.WorkArea;
-                            appWindow.Resize(new SizeInt32(480, 720));
-                            appWindow.Move(new PointInt32((workArea.Width - 480) / 2, (workArea.Height - 720) / 2));
-                            if (appWindow.Presenter is OverlappedPresenter presenter)
-                            {
-                                presenter.IsResizable = false;
-                                presenter.IsMaximizable = false;
-                            }
+
+                            // Ajusta o tamanho e a posição da janela para não sobrepor a barra de tarefas
+                            var newHeight = Math.Min(720, workArea.Height);
+                            var newWidth = Math.Min(480, workArea.Width);
+                            appWindow.Resize(new SizeInt32(newWidth, newHeight));
+                            appWindow.Move(new PointInt32((workArea.Width - newWidth) / 2, (workArea.Height - newHeight) / 2));
                             appWindow.Title = "Meu Título Personalizado";
                         });
                     });
