@@ -58,10 +58,10 @@ Com o AdvocaPro, os profissionais do direito têm em mãos uma ferramenta comple
    - Selecione a assinatura disponível e clique em **Detalhes**.
    - Na nova janela, clique em **Exibir certificado** e depois em **Instalar certificado**.
    - Siga as instruções apresentadas na tela para concluir a instalação do certificado.
-
-3. Após instalar o certificado, prossiga com a instalação normal da aplicação.
-   
+   - 
    ![image](https://github.com/user-attachments/assets/fcd0bbe1-9d96-4021-b238-eae57c0c2db4)
+   
+3. Após instalar o certificado, prossiga com a instalação normal da aplicação.
 
 4. Use `admin` como usuário padrão e `admin` como senha padrão. Atualmente, não é possível alterar essas credenciais.
 
