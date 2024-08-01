@@ -51,11 +51,21 @@ Com o AdvocaPro, os profissionais do direito têm em mãos uma ferramenta comple
 
 ## Como Executar?
 
-Faça o download da versão mais recente [aqui](https://github.com/fpedrolucas95/AdvocaPro/releases).
+1. Faça o download da versão mais recente [aqui](https://github.com/fpedrolucas95/AdvocaPro/releases).
 
-O usuário padrão é `admin`, e a senha padrão é `admin`. Neste momento, não é possível mudá-la.
+2. Após baixar o arquivo, clique com o botão direito sobre ele e selecione **Propriedades**. Na janela que abrir, siga os passos abaixo:
+   - Vá para a aba **Assinaturas Digitais**.
+   - Selecione a assinatura disponível e clique em **Detalhes**.
+   - Na nova janela, clique em **Exibir certificado** e depois em **Instalar certificado**.
+   - Siga as instruções apresentadas na tela para concluir a instalação do certificado.
 
-**Disclaimer:** O AdvocaPro está em estágio de desenvolvimento. Embora você possa baixar e testar a aplicação, seu uso em um ambiente de produção ou real não é recomendado neste momento. A aplicação ainda está sendo aprimorada e pode conter bugs ou funcionalidades incompletas. Use-a com cautela e apenas para fins de avaliação e testes.
+3. Após instalar o certificado, prossiga com a instalação normal da aplicação.
+   
+   ![image](https://github.com/user-attachments/assets/fcd0bbe1-9d96-4021-b238-eae57c0c2db4)
+
+4. Use `admin` como usuário padrão e `admin` como senha padrão. Atualmente, não é possível alterar essas credenciais.
+
+**Disclaimer:** O AdvocaPro está em fase de desenvolvimento. Você pode baixar e testar a aplicação, mas não é recomendado usá-la em ambientes de produção ou em situações reais. A aplicação ainda está sendo aprimorada e pode apresentar bugs ou funcionalidades incompletas. Utilize-a com cautela e apenas para avaliação e testes.
 
 ## Licença
 
