@@ -58,7 +58,7 @@ Com o AdvocaPro, os profissionais do direito têm em mãos uma ferramenta comple
    - Selecione a assinatura disponível e clique em **Detalhes**.
    - Na nova janela, clique em **Exibir certificado** e depois em **Instalar certificado**.
    - Siga as instruções apresentadas na tela para concluir a instalação do certificado.
-   - 
+     
    ![image](https://github.com/user-attachments/assets/fcd0bbe1-9d96-4021-b238-eae57c0c2db4)
    
 3. Após instalar o certificado, prossiga com a instalação normal da aplicação.
