@@ -5,24 +5,24 @@ namespace AdvocaPro.Services
 {
     public class LoginService
     {
-        private readonly string _databasePath;
+        private readonly DatabaseService _databaseService;
         private User? _loggedInUser;
 
-        public LoginService(string databasePath)
+        public LoginService(DatabaseService databaseService)
         {
-            _databasePath = databasePath;
+            _databaseService = databaseService;
         }
 
         public async Task<User?> GetUserAsync(string username, string password)
         {
             try
             {
-                using (var connection = new SqliteConnection($"Filename={_databasePath}"))
+                using (var connection = new SqliteConnection($"Filename={_databaseService.GetDatabasePath()}"))
                 {
                     await connection.OpenAsync();
 
                     var command = connection.CreateCommand();
-                    command.CommandText = "SELECT * FROM Users WHERE UserName = @UserName AND Password = @Password";
+                    command.CommandText = "SELECT * FROM User WHERE username = @UserName AND password = @Password";
                     command.Parameters.AddWithValue("@UserName", username);
                     command.Parameters.AddWithValue("@Password", password);
 
@@ -40,13 +40,12 @@ namespace AdvocaPro.Services
                         {
                             var user = new User
                             {
-                                UserName = reader.GetString(0),
-                                Password = reader.GetString(1),
-                                FirstName = reader.IsDBNull(2) ? string.Empty : reader.GetString(2),
-                                LastName = reader.IsDBNull(3) ? string.Empty : reader.GetString(3),
-                                Phone = reader.IsDBNull(4) ? string.Empty : reader.GetString(4),
-                                CellPhone = reader.IsDBNull(5) ? string.Empty : reader.GetString(5),
-                                Registry = reader.IsDBNull(6) ? string.Empty : reader.GetString(6),
+                                UserName = reader.GetString(1),
+                                Password = reader.GetString(2),
+                                FirstName = reader.IsDBNull(3) ? string.Empty : reader.GetString(3),
+                                LastName = reader.IsDBNull(4) ? string.Empty : reader.GetString(4),
+                                Phone = reader.IsDBNull(5) ? string.Empty : reader.GetString(5),
+                                CellPhone = reader.IsDBNull(6) ? string.Empty : reader.GetString(6),
                                 UserType = reader.GetInt32(7),
                                 CreatedAt = reader.GetDateTime(8),
                                 CreatedBy = reader.IsDBNull(9) ? string.Empty : reader.GetString(9),

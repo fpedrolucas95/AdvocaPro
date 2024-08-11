@@ -49,40 +49,14 @@ namespace AdvocaPro
 
             // Registro do Banco de Dados, Serviços, ViewModels e Views
             builder.Services.AddSingleton<DatabaseService>();
+            builder.Services.AddSingleton<UserService>();
+            builder.Services.AddSingleton<LoginService>();
 
-            var serviceProvider = builder.Services.BuildServiceProvider();
-            var databaseService = serviceProvider.GetRequiredService<DatabaseService>();
-            var databasePath = databaseService.GetDatabasePath();
-
-            builder.Services.AddSingleton(new CaseService(databasePath));
-            builder.Services.AddSingleton(new ClientService(databasePath));
-            builder.Services.AddSingleton(new ContactListService(databasePath));
-            builder.Services.AddSingleton(new ExpertiseService(databasePath));
-            builder.Services.AddSingleton(new FinanceService(databasePath));
-            builder.Services.AddSingleton(new HearingService(databasePath));
-            builder.Services.AddSingleton(new DeadlineService(databasePath));
-            builder.Services.AddSingleton(new SettingsService(databasePath));
-            builder.Services.AddSingleton(new UserService(databasePath));
-            builder.Services.AddSingleton(new LoginService(databasePath));
-            builder.Services.AddSingleton(new CategoryEntryService(databasePath));
-            builder.Services.AddSingleton(new CategoryExitService(databasePath));
-            builder.Services.AddSingleton(new PaymentMethodService(databasePath));
-            builder.Services.AddSingleton(new ProcessTypeService(databasePath));
-            builder.Services.AddSingleton(new HolidayService(databasePath));
-
-            builder.Services.AddTransient<ClientViewModel>();
-            builder.Services.AddTransient<ClientProfileViewModel>();
-            builder.Services.AddTransient<CasesViewModel>();
-            builder.Services.AddTransient<DeadlineManagementViewModel>();
             builder.Services.AddTransient<LoginPageViewModel>();
             builder.Services.AddSingleton<MainPageViewModel>();
 
             builder.Services.AddTransient<LoginPageView>();
             builder.Services.AddTransient<WelcomeView>();
-            builder.Services.AddTransient<ClientView>();
-            builder.Services.AddTransient<ClientProfileView>();
-            builder.Services.AddTransient<CasesView>();
-            builder.Services.AddTransient<DeadlineManagementView>();
 
             // Registro do AppShell
             builder.Services.AddSingleton<AppShell>();

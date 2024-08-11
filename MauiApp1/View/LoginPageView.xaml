@@ -1,65 +1,208 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:AdvocaPro.ViewModel"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="AdvocaPro.View.LoginPageView"
              BackgroundColor="{StaticResource DarkModeBackground}"
              Shell.NavBarIsVisible="False">
 
-    <Grid RowDefinitions="*, Auto" Padding="30">
-		<VerticalStackLayout Spacing="30" VerticalOptions="Center" Grid.Row="0">
-			<Label Text="Bem-vindo de volta"
-                   FontSize="28"
-                   TextColor="{StaticResource EmphasisHigh}"
-                   HorizontalOptions="Center"
-                   FontAttributes="Bold" />
+	<ContentPage.Resources>
+		<ResourceDictionary>
+			<toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+			<!-- Define Shadow -->
+			<Shadow x:Key="DefaultShadow"
+                    Brush="{AppThemeBinding Light={StaticResource Gray400}, Dark={StaticResource Gray900}}"
+                    Offset="2,2"
+                    Radius="5"
+                    Opacity="0.5" />
+		</ResourceDictionary>
+	</ContentPage.Resources>
 
-            <Frame BackgroundColor="{StaticResource DarkModeBox}" CornerRadius="10" Padding="15" HasShadow="False">
-				<VerticalStackLayout Spacing="15">
-					<VerticalStackLayout Spacing="5">
-                        <Label Text="Username" FontSize="14" TextColor="{StaticResource EmphasisMedium}" />
-						<Entry Placeholder="Digite seu username"
-                               Text="{Binding Username}"
+	<ContentView>
+		<ContentView.Content>
+			<StackLayout>
+				<!-- Login Layout -->
+				<ContentView IsVisible="{Binding IsFirstRun, Converter={StaticResource InvertedBoolConverter}}">
+					<Grid RowDefinitions="*, Auto" Padding="30">
+						<VerticalStackLayout Spacing="30" VerticalOptions="Center" Grid.Row="0">
+							<Label Text="Bem-vindo de volta"
+                                   FontSize="32"
+                                   Margin="0,24,0,0"
+                                   TextColor="{StaticResource EmphasisHigh}"
+                                   HorizontalOptions="Center"
+                                   FontAttributes="Bold"
+                                   Style="{StaticResource Headline}"/>
+
+							<Frame BackgroundColor="{StaticResource DarkModeBox}"
+                                   CornerRadius="15"
+                                   Padding="15"
+                                   Margin="0,48"
+                                   HasShadow="True"
+                                   Shadow="{StaticResource DefaultShadow}">
+								<VerticalStackLayout Spacing="15">
+									<VerticalStackLayout Spacing="5">
+										<Label Text="Username" FontSize="14" TextColor="{StaticResource EmphasisMedium}" />
+										<Entry Placeholder="Digite seu username"
+                                               Text="{Binding Username}"
+                                               TextColor="{StaticResource EmphasisHigh}"
+                                               PlaceholderColor="{StaticResource EmphasisLow}"
+                                               Keyboard="Email"
+                                               BackgroundColor="Transparent" />
+									</VerticalStackLayout>
+
+									<VerticalStackLayout Spacing="5">
+										<Label Text="Senha" FontSize="14" TextColor="{StaticResource EmphasisMedium}" />
+										<Entry Placeholder="Digite sua senha"
+                                               Text="{Binding Password}"
+                                               IsPassword="True"
+                                               TextColor="{StaticResource EmphasisHigh}"
+                                               PlaceholderColor="{StaticResource EmphasisLow}"
+                                               BackgroundColor="Transparent" />
+									</VerticalStackLayout>
+								</VerticalStackLayout>
+							</Frame>
+
+							<Button Text="ENTRAR"
+                                    BackgroundColor="{StaticResource PrimaryButton}"
+                                    TextColor="{StaticResource EmphasisHigh}"
+                                    CornerRadius="25"
+                                    HeightRequest="50"
+                                    FontAttributes="Bold"
+                                    Command="{Binding LoginCommand}"
+                                    Shadow="{StaticResource DefaultShadow}"/>
+						</VerticalStackLayout>
+
+						<Label Text="© 2024 Sua Empresa"
+                               Margin="0,128"
+                               TextColor="{StaticResource EmphasisMedium}"
+                               HorizontalOptions="Center"
+                               FontSize="12"
+                               Grid.Row="1" />
+					</Grid>
+				</ContentView>
+
+				<!-- Create Admin Layout -->
+				<ContentView IsVisible="{Binding IsFirstRun}">
+					<Grid RowDefinitions="Auto, *, Auto, Auto"
+                          HeightRequest="680"
+                          WidthRequest="400"
+                          RowSpacing="24">
+						<Label Text="{Binding WelcomeMessage}"
+                               Margin="0,24"
+                               FontSize="32"
                                TextColor="{StaticResource EmphasisHigh}"
-                               PlaceholderColor="{StaticResource EmphasisLow}"
-                               Keyboard="Email"
-                               BackgroundColor="Transparent" />
-					</VerticalStackLayout>
+                               HorizontalOptions="Center"
+                               FontAttributes="Bold"
+                               Style="{StaticResource Headline}"
+                               Grid.Row="0" />
 
-					<VerticalStackLayout Spacing="5">
-                        <Label Text="Senha" FontSize="14" TextColor="{StaticResource EmphasisMedium}" />
-						<Entry Placeholder="Digite sua senha"
-                               Text="{Binding Password}"
-                               IsPassword="True"
-                               TextColor="{StaticResource EmphasisHigh}"
-                               PlaceholderColor="{StaticResource EmphasisLow}"
-                               BackgroundColor="Transparent" />
-					</VerticalStackLayout>
-				</VerticalStackLayout>
-			</Frame>
+						<Frame BackgroundColor="{StaticResource DarkModeBox}"
+                               CornerRadius="15"
+                               Padding="15"
+                               HasShadow="True"
+                               Shadow="{StaticResource DefaultShadow}"
+                               Grid.Row="1"
+                               VerticalOptions="FillAndExpand">
+							<ScrollView>
+								<VerticalStackLayout Spacing="15">
+									<!-- Username -->
+									<VerticalStackLayout Spacing="5">
+										<Label Text="Username" FontSize="14" TextColor="{StaticResource EmphasisMedium}" />
+										<Entry Placeholder="Digite o username"
+                                               Text="{Binding Username}"
+                                               TextColor="{StaticResource EmphasisHigh}"
+                                               PlaceholderColor="{StaticResource EmphasisLow}"
+                                               Keyboard="Email"
+                                               BackgroundColor="Transparent" />
+									</VerticalStackLayout>
 
-			<Button Text="ENTRAR"
-                    BackgroundColor="{StaticResource PrimaryButton}"
-                    TextColor="{StaticResource EmphasisHigh}"
-                    CornerRadius="10"
-                    HeightRequest="50"
-                    FontAttributes="Bold"
-                    Command="{Binding LoginCommand}" />
+									<!-- Password -->
+									<Grid ColumnDefinitions="*,*" ColumnSpacing="16">
+										<VerticalStackLayout Grid.Column="0" Spacing="5">
+											<Label Text="Senha" FontSize="14" TextColor="{StaticResource EmphasisMedium}" />
+											<Entry Placeholder="Digite a senha"
+                                                   Text="{Binding Password}"
+                                                   IsPassword="True"
+                                                   TextColor="{StaticResource EmphasisHigh}"
+                                                   PlaceholderColor="{StaticResource EmphasisLow}"
+                                                   BackgroundColor="Transparent" />
+										</VerticalStackLayout>
 
-			<Label Text="Esqueceu a senha?"
-                   TextColor="{StaticResource EmphasisMedium}"
-                   HorizontalOptions="Center"
-                   FontSize="14">
-				<Label.GestureRecognizers>
-					<TapGestureRecognizer Command="{Binding ForgotPasswordCommand}" />
-				</Label.GestureRecognizers>
-			</Label>
-		</VerticalStackLayout>
+										<VerticalStackLayout Grid.Column="1" Spacing="5">
+											<Label Text="Confirmar Senha" FontSize="14" TextColor="{StaticResource EmphasisMedium}" />
+											<Entry Placeholder="Confirme a senha"
+                                                   Text="{Binding ConfirmPassword}"
+                                                   IsPassword="True"
+                                                   TextColor="{StaticResource EmphasisHigh}"
+                                                   PlaceholderColor="{StaticResource EmphasisLow}"
+                                                   BackgroundColor="Transparent" />
+										</VerticalStackLayout>
+									</Grid>
 
-		<Label Text="© 2024 Sua Empresa"
-               TextColor="{StaticResource EmphasisMedium}"
-               HorizontalOptions="Center"
-               FontSize="12"
-               Grid.Row="1" />
-	</Grid>
+									<!-- First Name -->
+									<VerticalStackLayout Spacing="5">
+										<Label Text="Nome" FontSize="14" TextColor="{StaticResource EmphasisMedium}" />
+										<Entry Placeholder="Digite o primeiro nome"
+                                               Text="{Binding FirstName}"
+                                               TextColor="{StaticResource EmphasisHigh}"
+                                               PlaceholderColor="{StaticResource EmphasisLow}"
+                                               BackgroundColor="Transparent" />
+									</VerticalStackLayout>
+
+									<!-- Last Name -->
+									<VerticalStackLayout Spacing="5">
+										<Label Text="Sobrenome" FontSize="14" TextColor="{StaticResource EmphasisMedium}" />
+										<Entry Placeholder="Digite o sobrenome"
+                                               Text="{Binding LastName}"
+                                               TextColor="{StaticResource EmphasisHigh}"
+                                               PlaceholderColor="{StaticResource EmphasisLow}"
+                                               BackgroundColor="Transparent" />
+									</VerticalStackLayout>
+
+									<!-- Cell Phone -->
+									<Grid ColumnDefinitions="Auto,*" ColumnSpacing="16">
+										<VerticalStackLayout Grid.Column="0" Spacing="5">
+											<Label Text="Data de Nascimento" FontSize="14" TextColor="{StaticResource EmphasisMedium}" />
+											<DatePicker Date="{Binding BirthdayDate}" />
+										</VerticalStackLayout>
+
+										<VerticalStackLayout Grid.Column="1" Spacing="5">
+											<Label Text="Celular" FontSize="14" TextColor="{StaticResource EmphasisMedium}" />
+											<Entry Placeholder="Digite o celular"
+                                                   Text="{Binding CellPhone}"
+                                                   TextColor="{StaticResource EmphasisHigh}"
+                                                   PlaceholderColor="{StaticResource EmphasisLow}"
+                                                   Keyboard="Telephone"
+                                                   BackgroundColor="Transparent" />
+										</VerticalStackLayout>
+									</Grid>
+
+									<!-- Email -->
+									<VerticalStackLayout Spacing="5">
+										<Label Text="Email" FontSize="14" TextColor="{StaticResource EmphasisMedium}" />
+										<Entry Placeholder="Digite o email"
+                                               Text="{Binding Email}"
+                                               TextColor="{StaticResource EmphasisHigh}"
+                                               PlaceholderColor="{StaticResource EmphasisLow}"
+                                               Keyboard="Email"
+                                               BackgroundColor="Transparent" />
+									</VerticalStackLayout>
+								</VerticalStackLayout>
+							</ScrollView>
+						</Frame>
+
+						<Button Text="CRIAR ADMINISTRADOR"
+                                BackgroundColor="{StaticResource PrimaryButton}"
+                                TextColor="{StaticResource EmphasisHigh}"
+                                CornerRadius="25"
+                                HeightRequest="50"
+                                FontAttributes="Bold"
+                                Command="{Binding CreateUserCommand}"
+                                Shadow="{StaticResource DefaultShadow}"
+                                Grid.Row="2" />
+					</Grid>
+				</ContentView>
+			</StackLayout>
+		</ContentView.Content>
+	</ContentView>
 </ContentPage>

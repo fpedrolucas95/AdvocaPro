@@ -1,0 +1,139 @@
+CREATE TABLE User (
+    id INTEGER PRIMARY KEY,
+    username TEXT NOT NULL UNIQUE, -- Nome de usuário para login
+    password TEXT NOT NULL, -- Senha do usuário
+    first_name TEXT, -- Primeiro nome do usuário
+    last_name TEXT, -- Sobrenome do usuário
+    phone TEXT, -- Telefone do usuário
+    cell_phone TEXT, -- Celular do usuário
+    registry TEXT, -- Registro do usuário
+    user_type INTEGER, -- Tipo de usuário (ex. admin, normal)
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP, -- Data de criação do usuário
+    created_by TEXT, -- Usuário que criou o registro
+    updated_at DATETIME, -- Data de última atualização do registro
+    updated_by TEXT, -- Usuário que fez a última atualização
+    last_edit_computer TEXT, -- Computador que realizou a última edição
+    birthday_date DATE, -- Data de aniversário do usuário
+    age INTEGER, -- Idade do usuário
+    email TEXT -- Email do usuário
+);
+
+CREATE TABLE Driver (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL, -- Nome completo do motorista
+    contract_percentage REAL, -- Percentual do contrato negociado com o motorista
+    vacation_start DATE, -- Data de início das férias do motorista
+    vacation_days INTEGER, -- Número de dias de férias do motorista
+    remarks TEXT, -- Observações adicionais sobre o motorista
+    prio_card TEXT, -- Número do cartão PRIO associado ao motorista
+    vehicle_registration TEXT, -- Matrícula do veículo vinculado ao motorista
+    start_date DATE, -- Data de início do contrato do motorista
+    end_date DATE, -- Data de término do contrato do motorista
+    phone TEXT, -- Telefone do motorista
+    email TEXT, -- Email do motorista
+    nif TEXT, -- Número de Identificação Fiscal (NIF) do motorista
+    driving_license TEXT, -- Número da Carta de Condução (CNH) do motorista
+    bank_name TEXT, -- Nome do banco do motorista para pagamentos
+    account_number TEXT, -- Número da conta bancária do motorista
+    iban TEXT, -- IBAN do motorista para transações internacionais
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP, -- Data de criação do registro
+    created_by TEXT, -- Usuário que criou o registro
+    updated_at DATETIME, -- Data de última atualização do registro
+    updated_by TEXT -- Usuário que fez a última atualização
+);
+
+CREATE TABLE Vehicle (
+    registration TEXT PRIMARY KEY, -- Matrícula do veículo
+    owner_id INTEGER, -- ID do proprietário do veículo, referência à tabela Driver se o motorista for o proprietário
+    insurance REAL, -- Valor do seguro do veículo
+    remarks TEXT, -- Observações adicionais sobre o veículo
+    available BOOLEAN DEFAULT 1, -- Status indicando se o veículo está disponível (1 = Livre, 0 = Ocupado)
+    owner_bank_name TEXT, -- Nome do banco do proprietário do veículo
+    owner_account_number TEXT, -- Número da conta bancária do proprietário do veículo
+    owner_iban TEXT, -- IBAN do proprietário do veículo para transações internacionais
+    owner_phone TEXT, -- Telefone do proprietário do veículo
+    owner_email TEXT, -- Email do proprietário do veículo
+    owner_nif TEXT, -- Número de Identificação Fiscal (NIF) do proprietário
+    owner_driving_license TEXT, -- Número da Carta de Condução do proprietário, se aplicável
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP, -- Data de criação do registro
+    created_by TEXT, -- Usuário que criou o registro
+    updated_at DATETIME, -- Data de última atualização do registro
+    updated_by TEXT, -- Usuário que fez a última atualização
+    FOREIGN KEY (owner_id) REFERENCES Driver(id) -- Chave estrangeira referenciando o proprietário na tabela Driver
+);
+
+CREATE TABLE PrioCard (
+    id INTEGER PRIMARY KEY,
+    card_number TEXT UNIQUE NOT NULL, -- Número único do cartão PRIO
+    driver_id INTEGER, -- ID do motorista associado ao cartão PRIO
+    available BOOLEAN DEFAULT 1, -- Status indicando se o cartão está disponível (1 = Livre, 0 = Ocupado)
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP, -- Data de criação do registro
+    created_by TEXT, -- Usuário que criou o registro
+    updated_at DATETIME, -- Data de última atualização do registro
+    updated_by TEXT, -- Usuário que fez a última atualização
+    FOREIGN KEY (driver_id) REFERENCES Driver(id) -- Chave estrangeira referenciando o motorista na tabela Driver
+);
+
+CREATE TABLE Transactions (
+    id INTEGER PRIMARY KEY,
+    driver_id INTEGER, -- ID do motorista associado à transação
+    type TEXT, -- Tipo de transação (ex. Bolt, Uber, Gorjeta)
+    amount REAL, -- Valor da transação
+    date DATE, -- Data da transação
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP, -- Data de criação do registro
+    created_by TEXT, -- Usuário que criou o registro
+    updated_at DATETIME, -- Data de última atualização do registro
+    updated_by TEXT, -- Usuário que fez a última atualização
+    FOREIGN KEY (driver_id) REFERENCES Driver(id) -- Chave estrangeira referenciando o motorista na tabela Driver
+);
+
+CREATE TABLE Expenses (
+    id INTEGER PRIMARY KEY,
+    description TEXT, -- Descrição da despesa
+    amount REAL, -- Valor da despesa
+    month INTEGER, -- Mês da despesa
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP, -- Data de criação do registro
+    created_by TEXT, -- Usuário que criou o registro
+    updated_at DATETIME, -- Data de última atualização do registro
+    updated_by TEXT -- Usuário que fez a última atualização
+);
+
+CREATE TABLE Payments (
+    id INTEGER PRIMARY KEY,
+    driver_id INTEGER, -- ID do motorista associado ao pagamento
+    amount_paid REAL, -- Valor pago ao motorista
+    payment_date DATE, -- Data do pagamento
+    description TEXT, -- Descrição do pagamento (ex. bônus, deduções)
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP, -- Data de criação do registro
+    created_by TEXT, -- Usuário que criou o registro
+    updated_at DATETIME, -- Data de última atualização do registro
+    updated_by TEXT, -- Usuário que fez a última atualização
+    FOREIGN KEY (driver_id) REFERENCES Driver(id) -- Chave estrangeira referenciando o motorista na tabela Driver
+);
+
+CREATE TABLE Settlements (
+    id INTEGER PRIMARY KEY,
+    driver_id INTEGER, -- ID do motorista associado ao acerto
+    amount_paid REAL, -- Valor pago ao motorista no acerto
+    deductions REAL, -- Descontos aplicados no acerto
+    tax REAL, -- Valor do imposto aplicado no acerto
+    date DATE, -- Data do acerto
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP, -- Data de criação do registro
+    created_by TEXT, -- Usuário que criou o registro
+    updated_at DATETIME, -- Data de última atualização do registro
+    updated_by TEXT, -- Usuário que fez a última atualização
+    FOREIGN KEY (driver_id) REFERENCES Driver(id) -- Chave estrangeira referenciando o motorista na tabela Driver
+);
+
+CREATE TABLE BankInformation (
+    id INTEGER PRIMARY KEY,
+    entity_id INTEGER, -- ID da entidade associada (pode ser motorista ou proprietário)
+    entity_type INTEGER, -- Tipo de entidade (0 para Motorista, 1 para Proprietário)
+    bank_name TEXT, -- Nome do banco da entidade
+    account_number TEXT, -- Número da conta bancária da entidade
+    iban TEXT, -- IBAN da entidade para transações internacionais
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP, -- Data de criação do registro
+    created_by TEXT, -- Usuário que criou o registro
+    updated_at DATETIME, -- Data de última atualização do registro
+    updated_by TEXT -- Usuário que fez a última atualização
+);
