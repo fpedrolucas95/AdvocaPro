@@ -80,6 +80,12 @@
 		<MauiXaml Update="AppShell.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="View\AddDriverPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="View\DriverView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="View\LoginPageView.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
@@ -94,6 +100,5 @@
 	<ItemGroup>
 	  <Folder Include="Converters\" />
 	  <Folder Include="Database\" />
-	  <Folder Include="Models\" />
 	</ItemGroup>
 </Project>

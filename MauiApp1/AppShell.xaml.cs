@@ -9,6 +9,7 @@ namespace AdvocaPro
             InitializeComponent();
             Routing.RegisterRoute("LoginPage", typeof(View.LoginPageView));
             Routing.RegisterRoute("WelcomeView", typeof(View.WelcomeView));
+            Routing.RegisterRoute("DriverView", typeof(View.DriverView));
         }
     }
 }

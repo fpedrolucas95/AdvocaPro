@@ -51,12 +51,22 @@ namespace AdvocaPro
             builder.Services.AddSingleton<DatabaseService>();
             builder.Services.AddSingleton<UserService>();
             builder.Services.AddSingleton<LoginService>();
+            builder.Services.AddSingleton<BankInformationService>();
+            builder.Services.AddSingleton<DriverService>();
+            builder.Services.AddSingleton<ExpensesService>();
+            builder.Services.AddSingleton<PaymentsService>();
+            builder.Services.AddSingleton<PrioCardService>();
+            builder.Services.AddSingleton<SettlementsService>();
+            builder.Services.AddSingleton<TransactionsService>();
+            builder.Services.AddSingleton<VehicleService>();
 
             builder.Services.AddTransient<LoginPageViewModel>();
             builder.Services.AddSingleton<MainPageViewModel>();
+            builder.Services.AddSingleton<DriverViewModel>();
 
             builder.Services.AddTransient<LoginPageView>();
             builder.Services.AddTransient<WelcomeView>();
+            builder.Services.AddTransient<DriverView>();
 
             // Registro do AppShell
             builder.Services.AddSingleton<AppShell>();

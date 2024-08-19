@@ -34,8 +34,10 @@ CREATE TABLE Driver (
     nif TEXT, -- Número de Identificação Fiscal (NIF) do motorista
     driving_license TEXT, -- Número da Carta de Condução (CNH) do motorista
     bank_name TEXT, -- Nome do banco do motorista para pagamentos
-    account_number TEXT, -- Número da conta bancária do motorista
+    account_number TEXT, -- Número de conta bancária do motorista
     iban TEXT, -- IBAN do motorista para transações internacionais
+    bolt_uid TEXT, -- Identificador do motorista na Bolt
+    uber_uid TEXT, -- Identificador do motorista na Uber
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP, -- Data de criação do registro
     created_by TEXT, -- Usuário que criou o registro
     updated_at DATETIME, -- Data de última atualização do registro
@@ -92,6 +94,7 @@ CREATE TABLE Expenses (
     description TEXT, -- Descrição da despesa
     amount REAL, -- Valor da despesa
     month INTEGER, -- Mês da despesa
+    year INTEGER, -- Ano da despesa
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP, -- Data de criação do registro
     created_by TEXT, -- Usuário que criou o registro
     updated_at DATETIME, -- Data de última atualização do registro

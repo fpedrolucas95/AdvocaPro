@@ -17,6 +17,9 @@
         <ShellContent Title="Home"
                       ContentTemplate="{DataTemplate views:WelcomeView}" 
                       Route="WelcomeView" />
+        <ShellContent Title="Motoristas"
+                      ContentTemplate="{DataTemplate views:DriverView}" 
+                      Route="DriverView" />
     </FlyoutItem>
 
     <Shell.ItemTemplate>

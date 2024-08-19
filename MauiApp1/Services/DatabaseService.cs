@@ -1,67 +1,61 @@
-﻿using System.IO;
-using Microsoft.Data.Sqlite;
+﻿using Microsoft.Data.Sqlite;
 using Windows.Storage;
 
-namespace AdvocaPro.Services
+namespace AdvocaPro.Services;
+
+public class DatabaseService
 {
-    public class DatabaseService
+    private readonly string _databaseDirectory;
+    private readonly string _databasePath;
+
+    public DatabaseService()
     {
-        private readonly string _databaseDirectory;
-        private readonly string _databasePath;
+        _databaseDirectory = Path.Combine(ApplicationData.Current.LocalFolder.Path, "FrotaApp", "database");
+        _databasePath = Path.Combine(_databaseDirectory, "sqlite.db");
+        EnsureDatabaseDirectoryExists();
+        EnsureDatabaseFileExists();
+        EnsureTablesExist();
+    }
 
-        public DatabaseService()
+    private void EnsureDatabaseDirectoryExists()
+    {
+        if (!Directory.Exists(_databaseDirectory))
         {
-            // Define the directory and path for the SQLite database file
-            _databaseDirectory = Path.Combine(ApplicationData.Current.LocalFolder.Path, "FrotaApp", "database");
-            _databasePath = Path.Combine(_databaseDirectory, "sqlite.db");
-            EnsureDatabaseDirectoryExists(); // Ensure the database directory is present
-            EnsureDatabaseFileExists();      // Ensure the database file is present
-            EnsureTablesExist();             // Ensure all required tables are created
+            Directory.CreateDirectory(_databaseDirectory);
         }
+    }
 
-        private void EnsureDatabaseDirectoryExists()
-        {
-            // Create the database directory if it does not exist
-            if (!Directory.Exists(_databaseDirectory))
-            {
-                Directory.CreateDirectory(_databaseDirectory);
-            }
-        }
-
-        private void EnsureDatabaseFileExists()
-        {
-            // Create an empty database file if it does not exist
-            if (!File.Exists(_databasePath))
-            {
-                using (var connection = new SqliteConnection($"Filename={_databasePath}"))
-                {
-                    connection.Open();
-                }
-            }
-        }
-
-        private void EnsureTablesExist()
+    private void EnsureDatabaseFileExists()
+    {
+        if (!File.Exists(_databasePath))
         {
             using (var connection = new SqliteConnection($"Filename={_databasePath}"))
             {
                 connection.Open();
-
-                // Check if the 'User' table exists; if not, create all tables
-                var command = connection.CreateCommand();
-                command.CommandText = "SELECT name FROM sqlite_master WHERE type='table' AND name='User';";
-                var result = command.ExecuteScalar();
-
-                if (result == null)
-                {
-                    // Table 'User' does not exist, so create all tables
-                    CreateTables(connection);
-                }
             }
         }
+    }
 
-        private void CreateTables(SqliteConnection connection)
+    private void EnsureTablesExist()
+    {
+        using (var connection = new SqliteConnection($"Filename={_databasePath}"))
         {
-            var createUserTable = @"
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText = "SELECT name FROM sqlite_master WHERE type='table' AND name='User';";
+            var result = command.ExecuteScalar();
+
+            if (result == null)
+            {
+                CreateTables(connection);
+            }
+        }
+    }
+
+    private void CreateTables(SqliteConnection connection)
+    {
+        var createUserTable = @"
                 CREATE TABLE IF NOT EXISTS User (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     username TEXT NOT NULL UNIQUE,
@@ -70,6 +64,7 @@ namespace AdvocaPro.Services
                     last_name TEXT,
                     phone TEXT,
                     cell_phone TEXT,
+                    registry TEXT,
                     user_type INTEGER,
                     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                     created_by TEXT,
@@ -81,7 +76,7 @@ namespace AdvocaPro.Services
                     email TEXT
                 );";
 
-            var createDriverTable = @"
+        var createDriverTable = @"
                 CREATE TABLE IF NOT EXISTS Driver (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     name TEXT NOT NULL,
@@ -100,13 +95,15 @@ namespace AdvocaPro.Services
                     bank_name TEXT,
                     account_number TEXT,
                     iban TEXT,
+                    bolt_uid TEXT,
+                    uber_uid TEXT,
                     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                     created_by TEXT,
                     updated_at DATETIME,
                     updated_by TEXT
                 );";
 
-            var createVehicleTable = @"
+        var createVehicleTable = @"
                 CREATE TABLE IF NOT EXISTS Vehicle (
                     registration TEXT PRIMARY KEY,
                     owner_id INTEGER,
@@ -127,7 +124,7 @@ namespace AdvocaPro.Services
                     FOREIGN KEY (owner_id) REFERENCES Driver(id)
                 );";
 
-            var createPrioCardTable = @"
+        var createPrioCardTable = @"
                 CREATE TABLE IF NOT EXISTS PrioCard (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     card_number TEXT UNIQUE NOT NULL,
@@ -140,7 +137,7 @@ namespace AdvocaPro.Services
                     FOREIGN KEY (driver_id) REFERENCES Driver(id)
                 );";
 
-            var createTransactionsTable = @"
+        var createTransactionsTable = @"
                 CREATE TABLE IF NOT EXISTS Transactions (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     driver_id INTEGER,
@@ -154,19 +151,20 @@ namespace AdvocaPro.Services
                     FOREIGN KEY (driver_id) REFERENCES Driver(id)
                 );";
 
-            var createExpensesTable = @"
+        var createExpensesTable = @"
                 CREATE TABLE IF NOT EXISTS Expenses (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     description TEXT,
                     amount REAL,
                     month INTEGER,
+                    year INTEGER,
                     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                     created_by TEXT,
                     updated_at DATETIME,
                     updated_by TEXT
                 );";
 
-            var createPaymentsTable = @"
+        var createPaymentsTable = @"
                 CREATE TABLE IF NOT EXISTS Payments (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     driver_id INTEGER,
@@ -180,7 +178,7 @@ namespace AdvocaPro.Services
                     FOREIGN KEY (driver_id) REFERENCES Driver(id)
                 );";
 
-            var createSettlementsTable = @"
+        var createSettlementsTable = @"
                 CREATE TABLE IF NOT EXISTS Settlements (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     driver_id INTEGER,
@@ -195,7 +193,7 @@ namespace AdvocaPro.Services
                     FOREIGN KEY (driver_id) REFERENCES Driver(id)
                 );";
 
-            var createBankInformationTable = @"
+        var createBankInformationTable = @"
                 CREATE TABLE IF NOT EXISTS BankInformation (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     entity_id INTEGER,
@@ -209,26 +207,25 @@ namespace AdvocaPro.Services
                     updated_by TEXT
                 );";
 
-            using (var transaction = connection.BeginTransaction())
+        using (var transaction = connection.BeginTransaction())
+        {
+            var commands = new[]
             {
-                var commands = new[]
-                {
-                    createUserTable, createDriverTable, createVehicleTable,
-                    createPrioCardTable, createTransactionsTable, createExpensesTable,
-                    createPaymentsTable, createSettlementsTable, createBankInformationTable
-                };
+                createUserTable, createDriverTable, createVehicleTable,
+                createPrioCardTable, createTransactionsTable, createExpensesTable,
+                createPaymentsTable, createSettlementsTable, createBankInformationTable
+            };
 
-                foreach (var sql in commands)
-                {
-                    var command = connection.CreateCommand();
-                    command.CommandText = sql;
-                    command.ExecuteNonQuery();
-                }
-
-                transaction.Commit();
+            foreach (var sql in commands)
+            {
+                var command = connection.CreateCommand();
+                command.CommandText = sql;
+                command.ExecuteNonQuery();
             }
-        }
 
-        public string GetDatabasePath() => _databasePath;
+            transaction.Commit();
+        }
     }
+
+    public string GetDatabasePath() => _databasePath;
 }

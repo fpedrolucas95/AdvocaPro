@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:AdvocaPro.ViewModel"
+             xmlns:converters="clr-namespace:AdvocaPro.Converters"
+             x:Class="AdvocaPro.View.DriverView"
+             Title="Motoristas">
+
+    <Grid Padding="24,8">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="{Binding ColumnSize}"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="48"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Column="0" Grid.Row="0" Text="Motoristas" FontSize="24" TextColor="{StaticResource EmphasisHigh}" HorizontalOptions="Start" VerticalOptions="Center" />
+
+        <HorizontalStackLayout Grid.ColumnSpan="2" Grid.Row="1" Spacing="10">
+            <Button Text="Novo Motorista"
+                    Command="{Binding OpenAddDriverCommand}"
+                    BackgroundColor="{StaticResource ConfirmButton}"
+                    TextColor="{StaticResource EmphasisHigh}"
+                    CornerRadius="2"/>
+            <Button Text="Excluir" 
+                    Command="{Binding DeleteDriverCommand}"
+                    BackgroundColor="{Binding DeleteButtonBackgroundColor}"
+                    TextColor="{Binding DeleteButtonTextColor}"
+                    CornerRadius="2"
+                    IsEnabled="{Binding CanExecuteDriverRelatedCommands}"/>
+            <Button Text="Detalhes" 
+                    Command="{Binding ToggleSummaryCommand}"
+                    BackgroundColor="{Binding DetailsButtonBackgroundColor}"
+                    TextColor="{Binding DetailsButtonTextColor}"
+                    CornerRadius="2"
+                    IsEnabled="{Binding CanExecuteDriverRelatedCommands}"/>
+            <Button Text="Relatório" 
+                    Command="{Binding GenerateReportCommand}"
+                    BackgroundColor="{StaticResource PrimaryButton}"
+                    TextColor="{StaticResource EmphasisHigh}"
+                    CornerRadius="2"/>
+        </HorizontalStackLayout>
+
+        <Entry Grid.Row="1" WidthRequest="360" HeightRequest="32" HorizontalOptions="End" VerticalOptions="Center" Placeholder="Pesquisar motoristas" Text="{Binding SearchText}"/>
+
+        <Border Grid.Row="2" Grid.ColumnSpan="{Binding DataGridColumnSpan}" Margin="0,24" BackgroundColor="{StaticResource EmphasisLow}" Stroke="{StaticResource DarkModeHeader}">
+            <ScrollView>
+                <CollectionView ItemsSource="{Binding Drivers}" SelectionMode="Single" SelectedItem="{Binding SelectedDriver}">
+                    <CollectionView.Header>
+                        <Grid ColumnDefinitions="50,350,100,125,120,200,*" Padding="8" BackgroundColor="{StaticResource DarkModeHeader}">
+                            <Label Grid.Column="0" Text="ID" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource EmphasisHigh}"/>
+                            <Label Grid.Column="1" Text="Nome" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource EmphasisHigh}"/>
+                            <Label Grid.Column="2" Text="Início" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource EmphasisHigh}"/>
+                            <Label Grid.Column="3" Text="PRIO Card" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource EmphasisHigh}"/>
+                            <Label Grid.Column="4" Text="Celular" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource EmphasisHigh}"/>
+                            <Label Grid.Column="5" Text="Email" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource EmphasisHigh}"/>
+                            <Label Grid.Column="6" Text="Ferias?" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource EmphasisHigh}"/>
+                        </Grid>
+                    </CollectionView.Header>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="50,350,100,125,120,118,80" Padding="8" BackgroundColor="{StaticResource DarkModeHeader}">
+                                <Label Grid.Column="0" Text="{Binding Id}" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource EmphasisHigh}"/>
+                                <Label Grid.Column="1" Text="{Binding Name}" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource EmphasisHigh}"/>
+                                <Label Grid.Column="2" Text="{Binding StartDate}" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource EmphasisHigh}"/>
+                                <Label Grid.Column="3" Text="{Binding PrioCard}" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource EmphasisHigh}"/>
+                                <Label Grid.Column="4" Text="{Binding Phone}" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource EmphasisHigh}"/>
+                                <Label Grid.Column="5" Text="{Binding Email}" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource EmphasisHigh}"/>
+                                <Label Grid.Column="6" Text="{Binding IsInVacation}" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource EmphasisHigh}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </ScrollView>
+        </Border>
+
+        <!-- Coluna lateral para o formulário de adicionar motorista -->
+        <ScrollView Grid.Column="1" Grid.RowSpan="3" Padding="0,0,-16,0">
+            <StackLayout Padding="20" Spacing="15">
+                <Label Text="Novo Motorista" FontSize="24" TextColor="{StaticResource EmphasisHigh}" HorizontalOptions="Start" VerticalOptions="Center" />
+
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="Nome Completo" TextColor="{StaticResource EmphasisMedium}"/>
+                    <Entry Placeholder="Nome Completo" Text="{Binding Driver.Name}" Keyboard="Text"/>
+                </VerticalStackLayout>
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="16" RowSpacing="6">
+                    <Label Grid.Column="0" Grid.Row="0" Text="Cartão Prio" TextColor="{StaticResource EmphasisMedium}"/>
+                    <Picker Grid.Column="0" Grid.Row="1" ItemsSource="{Binding PrioCards}" SelectedItem="{Binding Driver.PrioCard}" ItemDisplayBinding="{Binding card_number}"/>
+                    <Label Grid.Column="1" Grid.Row="0" Text="Veículo" TextColor="{StaticResource EmphasisMedium}"/>
+                    <Picker Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Vehicles}" SelectedItem="{Binding Driver.VehicleRegistration}" ItemDisplayBinding="{Binding registration}"/>
+                </Grid>
+                <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" ColumnSpacing="16" RowSpacing="6">
+                    <Label Grid.Column="0" Grid.Row="0" Text="Início" TextColor="{StaticResource EmphasisMedium}"/>
+                    <DatePicker Grid.Column="0" Grid.Row="1" Date="{Binding Driver.StartDate}"/>
+                    <Label Grid.Column="1" Grid.Row="0" Text="Porcentagem Contrato" TextColor="{StaticResource EmphasisMedium}"/>
+                    <Entry Grid.Column="1" Grid.Row="1" Placeholder="Apenas número" Text="{Binding Driver.ContractPercentage}" Keyboard="Numeric"/>
+                </Grid>
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="16" RowSpacing="6">
+                    <Label Grid.Column="0" Grid.Row="0" Text="Celular" TextColor="{StaticResource EmphasisMedium}"/>
+                    <Entry Grid.Column="0" Grid.Row="1" Placeholder="Celular" Text="{Binding Driver.Phone}" Keyboard="Telephone"/>
+                    <Label Grid.Column="1" Grid.Row="0" Text="E-mail" TextColor="{StaticResource EmphasisMedium}"/>
+                    <Entry Grid.Column="1" Grid.Row="1" Placeholder="E-mail" Text="{Binding Driver.Email}" Keyboard="Email"/>
+                </Grid>
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="16" RowSpacing="6">
+                    <Label Grid.Column="0" Grid.Row="0" Text="NIF" TextColor="{StaticResource EmphasisMedium}"/>
+                    <Entry Grid.Column="0" Grid.Row="1" Placeholder="NIF" Text="{Binding Driver.Nif}" Keyboard="Numeric"/>
+                    <Label Grid.Column="1" Grid.Row="0" Text="Carta" TextColor="{StaticResource EmphasisMedium}"/>
+                    <Entry Grid.Column="1" Grid.Row="1" Placeholder="Carta de Conducao" Text="{Binding Driver.DrivingLicense}" Keyboard="Text"/>
+                </Grid>
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="16" RowSpacing="6">
+                    <Label Grid.Column="0" Grid.Row="0" Text="Banco" TextColor="{StaticResource EmphasisMedium}"/>
+                    <Entry Grid.Column="0" Grid.Row="1" Placeholder="Nome do Banco" Text="{Binding Driver.BankName}" Keyboard="Text"/>
+                    <Label Grid.Column="1" Grid.Row="0" Text="Conta" TextColor="{StaticResource EmphasisMedium}"/>
+                    <Entry Grid.Column="1" Grid.Row="1" Placeholder="Numero da Conta" Text="{Binding Driver.AccountNumber}" Keyboard="Numeric"/>
+                </Grid>
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="Identificador Bolt" TextColor="{StaticResource EmphasisMedium}"/>
+                    <Entry Placeholder="Identificador Bolt" Text="{Binding Driver.BoltUid}" Keyboard="Text"/>
+                </VerticalStackLayout>
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="Identificador Uber" TextColor="{StaticResource EmphasisMedium}"/>
+                    <Entry Placeholder="Identificador Uber" Text="{Binding Driver.UberUid}" Keyboard="Text"/>
+                </VerticalStackLayout>
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="16" Margin="0,16">
+                    <Button Grid.Column="0" Text="Cancelar" Command="{Binding CancelCommand}" BackgroundColor="{StaticResource CancelButton}" TextColor="{StaticResource EmphasisHigh}"/>
+                    <Button Grid.Column="1" Text="Salvar" Command="{Binding SaveCommand}" BackgroundColor="{StaticResource ConfirmButton}" TextColor="{StaticResource EmphasisHigh}"/>
+                </Grid>
+            </StackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>
