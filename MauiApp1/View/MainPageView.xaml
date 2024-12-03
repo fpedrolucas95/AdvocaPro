@@ -17,15 +17,9 @@
         <ShellContent Title="Home"
                       ContentTemplate="{DataTemplate views:WelcomeView}" 
                       Route="WelcomeView" />
-        <ShellContent Title="Clientes"
-                      ContentTemplate="{DataTemplate views:ClientView}"
-                      Route="ClientView" />
-        <ShellContent Title="Processos"
-                      ContentTemplate="{DataTemplate views:CasesView}"
-                      Route="CasesView" />
-        <ShellContent Title="Prazos"
-                      ContentTemplate="{DataTemplate views:DeadlineManagementView}"
-                      Route="DeadlineManagementView" />
+        <ShellContent Title="Motoristas"
+                      ContentTemplate="{DataTemplate views:DriverView}" 
+                      Route="DriverView" />
     </FlyoutItem>
 
     <Shell.ItemTemplate>

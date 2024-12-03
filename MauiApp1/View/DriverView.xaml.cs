@@ -2,9 +2,9 @@
 
 namespace AdvocaPro.View
 {
-    public partial class CasesView : ContentPage
+    public partial class DriverView : ContentPage
     {
-        public CasesView(CasesViewModel viewModel)
+        public DriverView(DriverViewModel viewModel)
         {
             InitializeComponent();
             BindingContext = viewModel;
